@@ -1,9 +1,10 @@
-import microbit
+import machine
+import utime
 
 # (c) IDWizard 2017
 # MIT License.
 
-microbit.display.off()
+#microbit.display.off()
 
 LOW = 0
 HIGH = 1
@@ -26,6 +27,18 @@ FULL_STEP = [
  [LOW, HIGH, LOW, HIGH],
  [HIGH, LOW, LOW, HIGH]
 ]
+
+# Stepper 1
+p1 = machine.Pin(5, machine.Pin.OUT)
+p2 = machine.Pin(4, machine.Pin.OUT)
+p3 = machine.Pin(0, machine.Pin.OUT)
+p4 = machine.Pin(2, machine.Pin.OUT)
+# Stepper 2
+p5 = machine.Pin(14, machine.Pin.OUT)
+p6 = machine.Pin(12, machine.Pin.OUT)
+p7 = machine.Pin(13, machine.Pin.OUT)
+p8 = machine.Pin(15, machine.Pin.OUT)
+
 
 class Command():
     """Tell a stepper to move X many steps in direction"""
@@ -54,7 +67,7 @@ class Driver():
                     count += 1
         
 class Stepper():
-    def __init__(self, mode, pin1, pin2, pin3, pin4, delay=2):
+    def __init__(self, mode, pin1, pin2, pin3, pin4, delay=5):
         self.mode = mode
         self.pin1 = pin1
         self.pin2 = pin2
@@ -69,24 +82,24 @@ class Stepper():
         """Rotate count steps. direction = -1 means backwards"""
         for x in range(count):
             for bit in self.mode[::direction]:
-                self.pin1.write_digital(bit[0]) 
-                self.pin2.write_digital(bit[1]) 
-                self.pin3.write_digital(bit[2]) 
-                self.pin4.write_digital(bit[3]) 
-                microbit.sleep(self.delay)
+                self.pin1.value(bit[0]) 
+                self.pin2.value(bit[1]) 
+                self.pin3.value(bit[2]) 
+                self.pin4.value(bit[3]) 
+                utime.sleep_ms(self.delay)
         self.reset()
         
     def reset(self):
         # Reset to 0, no holding, these are geared, you can't move them
-        self.pin1.write_digital(0) 
-        self.pin2.write_digital(0) 
-        self.pin3.write_digital(0) 
-        self.pin4.write_digital(0) 
+        self.pin1.value(0) 
+        self.pin2.value(0) 
+        self.pin3.value(0) 
+        self.pin4.value(0) 
 
 if __name__ == '__main__':
 
-    s1 = Stepper(HALF_STEP, microbit.pin16, microbit.pin15, microbit.pin14, microbit.pin13, delay=5)    
-    s2 = Stepper(HALF_STEP, microbit.pin6, microbit.pin5, microbit.pin4, microbit.pin3, delay=5)   
+    s1 = Stepper(HALF_STEP, p1, p2, p3, p4, delay=5) 
+    s2 = Stepper(HALF_STEP, p5, p6, p7, p8, delay=5) 
     #s1.step(FULL_ROTATION)
     #s2.step(FULL_ROTATION)
 
