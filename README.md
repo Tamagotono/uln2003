@@ -1,5 +1,6 @@
 # uln2003
-Micropython code to drive stepper motors via ULN2003
+Circuit Python code to drive stepper motors via ULN2003
+Added a Micropython branch. --Tamagotono
 
 This is the ongoing work of my experiments with the BBC micro:bit and some ULN2003 stepper motors connected to 5V 28BYJ-48 Stepper Motors.
 
